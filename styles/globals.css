@@ -1,0 +1,424 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Trajan';
+  src: url('/fonts/Trajan/Trajan-Pro-3-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --primary: #BCB08A;
+  --secondary: #303030;
+  --tercero: #212121;
+  --cuarto: #474747;
+  --quinto: #F7F7F7;
+  --sexto: #D9D9D933;
+  --septimo: #FFFFFF5C;
+  --octavo: #3C3C434D;
+  --noveno: #F1F1F1;
+  --decimo: #D9D9D966;
+  --onceavo: #637381;
+  --doce: #282828;
+  --black: #000;
+  --white: #fff;
+}
+
+*::-moz-selection {
+  background-color: var(--primary);
+  color: #000
+}
+
+*::selection {
+  background-color: var(--primary);
+  color: #000
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.trajan{
+  font-family: 'Trajan', sans-serif;
+}
+
+.bg-header{
+  background-color: var(--secondary);
+}
+
+.bg-footer{
+  background-color: var(--tercero);
+}
+
+.bg-footer-2{
+  background: rgb(0,0,0);
+  background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.83) 100%);
+}
+
+.bg-tfs{
+  background-color: var(--primary);
+}
+
+.bg-cuarto{
+  background-color: var(--cuarto);
+}
+
+.bg-quinto{
+  background-color: var(--quinto);
+}
+
+.bg-sexto{
+  background-color: var(--sexto);
+}
+
+.bg-septimo{
+  background-color: var(--septimo);
+}
+
+.bg-octavo{
+  background-color: var(--octavo);
+}
+
+.bg-noveno{
+  background-color: var(--noveno);
+}
+
+.bg-decimo{
+  background-color: var(--decimo);
+}
+
+.bg-doce{
+  background-color: var(--doce);
+}
+
+.bg-text{
+  background-color: var(--quinto);
+}
+
+.bg-modal{
+  background-color: #fff;
+}
+
+.bg-galeria{
+  background-color: #BCB08AD6;
+  opacity: 0;
+}
+
+.bg-galeria:hover{
+  opacity: 1;
+}
+
+.bg-cinta{
+  background-color: #3C3C434D;
+}
+
+.bg-dunas{
+  background-color: #DEDACF;
+}
+
+.text-menu{
+  color: #F8F9FA;
+  font-size: 15px;
+  letter-spacing: .3px;
+}
+
+.text-tfs{
+  color: var(--primary);
+}
+
+.text-dunas{
+  color: #DEDACF;
+}
+
+.text-secondary{
+  color: var(--cuarto);
+}
+
+.text-tercero{
+  color: var(--secondary);
+}
+
+.text-onceavo{
+  color: var(--onceavo);
+}
+
+.hover:hover{
+  color: #a59a77;
+}
+
+.hover-bg:hover{
+  background-color: #a59a77;
+}
+
+.hover-bg-2:hover{
+  background-color: var(--decimo);
+}
+
+.border-color{
+  border-color: var(--primary) !important;
+}
+
+.letter-spacing-25{
+  letter-spacing: .25em;
+}
+
+.video{
+  min-height: 660px;
+}
+
+.portada-video{
+  min-height: 464px;
+}
+
+.portada-ciudades{
+  min-height: 366px;
+}
+
+.portada-video-final{
+  min-height: 600px;
+}
+
+.portada-video-construccion{
+  min-height: 244px;
+}
+
+.portada-video-nosotros{
+  min-height: 690px;
+}
+
+.portada-video-final-nosotros{
+  min-height: 926px;
+}
+
+.portada-blog{
+  min-height: 464px;
+}
+
+.overlay-tulum{
+  background-color: #053E47;
+  opacity: 0.28;
+  transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
+}
+
+.overlay-construccion{
+  background-color: #000;
+  opacity: 0.45;
+  transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
+}
+
+.overlay-nosotros{
+  background-color: #000;
+  opacity: 0.5;
+  transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
+}
+
+.overlay-dunas{
+  background: linear-gradient(181.49deg,transparent 11.17%,#000 90%);
+}
+
+.overlay-footer-final{
+  background-image: url('../public/img/bg-footer.png');
+  background-position: center left;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.portada-cabos{
+  background: url('../public/img/cabos/portada-cabos.webp') 50% 50%;
+  background-attachment: fixed;
+  background-position: 0px -84px;
+  background-repeat: no-repeat;
+}
+
+.portada-cabos-final{
+  background: url('../public/img/cabos/portada-cabos-final.webp') 50% 50%;
+  background-size: cover;
+}
+
+.bg-modal-img{
+  background: url('../public/img/portada-modal.jpg') 40%;
+  background-size: cover;
+}
+
+.portada-dunas{
+  background: url('../public/img/dunas/portada.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-x: 30%;
+}
+
+.video-fondo{
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.video-fondo-portada{
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  height: inherit;
+  object-fit: cover;
+}
+
+.separador{
+  border-top: 3px solid var(--white);
+  width: 90%;
+  margin: 0 auto;
+}
+
+.separador-tfs{
+  border-top: 3px solid var(--primary);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.text-shadow{
+  text-shadow: 0px 0px 22px rgba(0, 0, 0, 0.50);
+}
+
+.text-40{
+  font-size: 40px;
+}
+
+.text-160{
+  font-size: 160px;
+}
+
+.mySwiper{
+  height: 407px;
+}
+
+.h-300{
+  height: 300px;
+}
+
+.h-500{
+  height: 500px;
+}
+
+.h-550{
+  height: 550px;
+}
+
+.h-600{
+  height: 600px;
+}
+
+.h-dunas{
+  height: 800px;
+}
+
+.w-modal{
+  width: 850px;
+}
+
+.portadas-blog{
+  height: 300px;
+}
+
+.altura-blog{
+  height: 330px;
+}
+
+.img-full{
+  width: -webkit-fill-available;
+}
+
+.PhoneInputInput{
+  background-color: transparent;
+}
+
+.bg-slide-cabos{
+  background-image: url('../public/img/mejores-los-cabos.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.dunas-bg-1{
+  background-image: url('../public/img/dunas/dunas-1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.dunas-bg-2{
+  background-image: url('../public/img/dunas/dunas-2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-x: center;
+}
+
+.dunas-bg-3{
+  background-image: url('../public/img/dunas/dunas-3.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-x: center;
+}
+
+.dunas-bg-4{
+  background-image: url('../public/img/dunas/dunas-4.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 768px) {
+  .video, .portada-video, .portada-video-final, .portada-blog{
+    min-height: 300px;
+  }
+
+  .text-40{
+    font-size: 25px;
+  }
+
+  .mySwiper{
+    height: 250px;
+  }
+
+  .portada-ciudades{
+    min-height: 200px;
+  }
+
+  .portada-franquicias-cancun-inicio, .portada-franquicias-cancun-final{
+    background-attachment: initial;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .portada-video-final-nosotros{
+    min-height: 600px;
+  }
+
+  .overlay-nosotros-final{
+    background-size: 380px auto;
+  }
+
+  .portada-video-final-responsive{
+    min-height: 755px;
+  }
+
+  .boton-contactanos{
+    background-color: var(--sexto);
+  }
+
+  .w-modal{
+    width: 90%;
+  }
+
+  .portada-cabos{
+    background-size: cover;
+    background-attachment: inherit;
+    background-position: 0px;
+  }
+
+  .h-dunas{
+    height:auto
+  }
+}
