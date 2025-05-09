@@ -1,35 +1,111 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import Script from "next/script";
-import Layout from "@/components/layout";
 import Image from "next/image";
 import Link from "next/link";
-import Boton from "@/components/boton";
-import Formulario from "@/components/formulario";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation } from 'swiper/modules';
-import { FaLocationDot } from "react-icons/fa6";
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
+import PhoneInput from 'react-phone-number-input';
+import LayoutDunas from "@/components/layout-dunas";
+import MapaDunas from "@/components/map-dunas";
+import 'react-phone-number-input/style.css';
 
-export default function Cabos() {
+export default function Dunas() {
   // Traducciones
-  const { t } = useTranslation()
-  const [showModal, setShowModal] = useState(false);
+  const { t } = useTranslation(); // Inicializar el hook useTranslation
 
-  const abrirModal = () => {
-    setShowModal(true);
+  // Campos formulario
+  const [nombre, setNombre] = useState('');
+  const [email, setEmail] = useState('');
+  const [tel, setTel] = useState('');
+  const [tipo, setTipo] = useState('');
+  const [inversion, setInversion] = useState('');
+  const [tipologias, setTipologias] = useState([]);
+  const [condiciones, setCondiciones] = useState(true);
+  // campos ocultos
+  const [fechaEnvio, setFechaEnvio] = useState('');
+  const [horaEnvio, setHoraEnvio] = useState('');
+  const [paginaEnvio, setPaginaEnvio] = useState('');
+  const [formularioOrigen, setFormularioOrigen] = useState('');
+  // Mensaje de éxito
+  const [mensajeRespuesta, setMensajeRespuesta] = useState('');
+  const [esExito, setEsExito] = useState(false);
+  // Estado del boton de envio
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const fechaActual = new Date();
+    setFechaEnvio(fechaActual.toLocaleDateString());
+    setHoraEnvio(fechaActual.toLocaleTimeString());
+    setPaginaEnvio(window.location.href);
+    setFormularioOrigen('Dunas');
+  }, []);
+
+  // Controlador para el cambio en el checkbox
+  const handleCheckboxChange = (e) => {
+    setCondiciones(e.target.checked);
   };
 
-  const cerrarModal = () => {
-    setShowModal(false);
+  const handleTipologiaChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setTipologias([...tipologias, value]);
+    } else {
+      setTipologias(tipologias.filter(t => t !== value));
+    }
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Deshabilitar el botón de envío y limpiar el formulario inmediatamente
+    setIsSubmitting(true);
+    setNombre('');
+    setEmail('');
+    setTel('');
+    setTipo('');
+    setInversion('');
+    setTipologias('');
+    setCondiciones(true); // o false, dependiendo de tu caso
+
+    try {
+      const respuesta = await fetch('/api/form-dunas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, email, tel, tipo, inversion, tipologias, condiciones, fechaEnvio, horaEnvio, paginaEnvio, formularioOrigen }),
+      });
+      if (respuesta.ok) {
+        console.log("Correo enviado con éxito");
+        // Respuesta exitosa y como limpiar el formulario o mostrar un mensaje
+        setMensajeRespuesta("Formulario enviado con éxito.");
+        setEsExito(true);
+        // Limpiar el formulario restableciendo el estado de cada campo
+        setNombre('');
+        setEmail('');
+        setTel('');
+        setTipo('');
+        setInversion('');
+        setTipologias('');
+        setCondiciones(true);
+      } else {
+        console.log("Error al enviar el correo");
+        // Manejar errores
+        setMensajeRespuesta("Ha ocurrido un error al enviar el formulario.");
+        setEsExito(false);
+      }
+    } catch (error) {
+      console.error("Hubo un error al enviar el correo: ", error);
+    }
+
+    finally {
+      // Habilitar el botón de envío nuevamente
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <Layout
-      title={"Los Cabos"}
-      description={t('cabos_descripcion')}
+    <LayoutDunas
+      title={"Dunas"}
+      description={'Dunas Residences is not just a home, it is a luxury refuge where design and nature merge in perfect harmony.'}
     >
       {/* Evento de pixel de Cabos */}
       <Script
@@ -50,338 +126,114 @@ export default function Cabos() {
           `,
         }}
       />
-      <div className="portada-cabos flex relative justify-center cursor-pointer" onClick={abrirModal}>
-        <div className="portada-ciudades flex justify-center items-end relative">
-          <h1 className="text-white font-bold text-center uppercase text-160 letter-spacing-25 leading-none z-0 -mb-6 max-lg:text-5xl max-lg:-mb-2">Los Cabos</h1>
-        </div>
-      </div>
-      <section className="bg-header z-10 relative">
-        <div className="container mx-auto grid grid-cols-2 gap-5 justify-center py-10 uppercase text-2xl font-bold letter-spacing-25 max-lg:text-base">
-          <div className="max-md:col-span-2">
-            <p className="w-full text-center text-tfs">{t('condos')}</p>
-            <p className="w-full text-center text-white">{t('desde')} $250,000 USD</p>
+      <section>
+        <div className="grid grid-cols-12 h-dunas">
+          <div className='col-span-7 max-md:col-span-12 max-md:h-[380px] portada-dunas flex flex-col items-center justify-center relative'>
+            <div className='absolute bottom-0 overlay-dunas w-full h-1/4'></div>
+            <Image src={'/img/dunas/pin.png'} className='max-md:w-24' width={200} height={312} alt="Pin"/>
+            <h1 className='text-white absolute bottom-20 max-md:bottom-6 text-5xl max-md:text-3xl trajan'>COMING SOON...</h1>
           </div>
-          <div className="max-md:col-span-2">
-            <p className="w-full text-center text-tfs">{t('casas_privadas')}</p>
-            <p className="w-full text-center text-white">{t('desde')} $350,000 USD</p>
-          </div>
-        </div>
-      </section>
-      <section className="py-16">
-        <div className="container mx-auto grid grid-cols-2 max-lg:grid-cols-1 max-lg:px-3 gap-4">
-          <div className="max-lg:pb-8">
-            <p className="text-tfs uppercase font-bold text-xl letter-spacing-25 text-center pb-7">{t('comunidades')}</p>
-            <Swiper
-              slidesPerView={1}
-              navigation={true}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
-              style={{
-                '--swiper-navigation-color': '#fff',
-                '--swiper-pagination-color': '#fff',
-              }}
-              modules={[Autoplay, Navigation]}
-              loop={true}
-              className="mySwiper cursor-pointer"
-              onClick={abrirModal}
-            >
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-1.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-2.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-3.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-4.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-5.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-6.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-7.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-8.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-9.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-10.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/comunidades-privadas/comunidades-privadas-11.jpg'} width={800} height={407} className="h-full object-cover" alt="Comunidades privadas"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-            </Swiper>
-            <p className="py-5 px-7 bg-text max-lg:text-sm">{t('golf')}</p>
-          </div>
-          <div>
-            <p className="text-tfs uppercase font-bold text-xl letter-spacing-25 text-center pb-7">{t('depas')}</p>
-            <Swiper
-              slidesPerView={1}
-              navigation={true}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
-              style={{
-                '--swiper-navigation-color': '#fff',
-                '--swiper-pagination-color': '#fff',
-              }}
-              modules={[Autoplay, Navigation]}
-              loop={true}
-              className="mySwiper cursor-pointer"
-              onClick={abrirModal}
-            >
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-1.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-2.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-3.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-4.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-5.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-6.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-7.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-8.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-9.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-10.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-11.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="relative h-full">
-                  <Image src={'/img/luxury-condos/luxury-condos-12.jpg'} width={800} height={407} className="h-full object-cover" alt="Luxury condos"/>
-                  <div className="absolute left-0 w-full flex items-end justify-center bottom-4 animate-fade-up animate-once animate-normal">
-                    <Boton/>
-                  </div>
-                </div>
-              </SwiperSlide>
-            </Swiper>
-            <p className="py-5 px-7 bg-text max-lg:text-sm">{t('alta')}</p>
-          </div>
-        </div>
-      </section>
-      <section className="pb-16">
-        <div className="container mx-auto grid grid-cols-2 gap-4 max-lg:px-3">
-          <h2 className="text-tfs text-4xl col-span-2 font-bold uppercase letter-spacing-25 text-center">{t('quienes')}</h2>
-          <p className="pb-12 text-center col-span-2">{t('en_los_cabos')}</p>
-          <h3 className="text-tfs font-bold letter-spacing-25 uppercase text-center text-4xl max-lg:text-2xl pb-10 col-span-2">{t('valores')}</h3>
-          <div className="grid grid-cols-4 max-lg:grid-cols-2 gap-3 pb-8 max-lg:pb-4 col-span-2">
-            <div className="grid justify-center justify-items-center">
-              <Image src={'/img/valores/compromiso.svg'} width={124} height={115} alt="compromiso"/>
-              <h4 className="text-secondary uppercase letter-spacing-25 font-bold max-md:text-sm">{t('compromiso')}</h4>
-            </div>
-            <div className="grid justify-center justify-items-center">
-              <Image src={'/img/valores/confianza.svg'} width={84} height={114} alt="confianza"/>
-              <h4 className="text-secondary uppercase letter-spacing-25 font-bold max-md:text-sm">{t('confianza')}</h4>
-            </div>
-            <div className="grid justify-center justify-items-center">
-              <Image src={'/img/valores/competitividad.svg'} width={116} height={113} alt="competitividad"/>
-              <h4 className="text-secondary uppercase letter-spacing-25 font-bold max-md:text-sm">{t('competitividad')}</h4>
-            </div>
-            <div className="grid justify-center justify-items-center">
-              <Image src={'/img/valores/innovacion.svg'} width={99} height={98} alt="innovación"/>
-              <h4 className="text-secondary uppercase letter-spacing-25 font-bold max-md:text-sm">{t('innovacion')}</h4>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 max-lg:grid-cols-2 gap-3 col-span-2">
-            <div className="grid justify-center justify-items-center">
-              <Image src={'/img/valores/honestidad.svg'} width={112} height={82} alt="honestidad"/>
-              <h4 className="text-secondary uppercase letter-spacing-25 font-bold max-md:text-sm">{t('honestidad')}</h4>
-            </div>
-            <div className="grid justify-center justify-items-center">
-              <Image src={'/img/valores/etica.svg'} width={92} height={86} alt="etica"/>
-              <h4 className="text-secondary uppercase letter-spacing-25 font-bold max-lg:text-center">{t('etica')}</h4>
-            </div>
-            <div className="grid justify-center justify-items-center max-lg:col-span-2">
-              <Image src={'/img/valores/lealtad.svg'} width={85} height={89} alt="lealtad"/>
-              <h4 className="text-secondary uppercase letter-spacing-25 font-bold max-md:text-sm">{t('lealtad')}</h4>
+          <div className='col-span-5 max-md:col-span-12 bg-doce flex flex-col items-center justify-center max-md:py-14'>
+            <h2 className='text-tfs trajan text-4xl pb-2'>friends & family</h2>
+            <p className='text-white text-xl'>Pricing for limited time</p>
+            <a href='#form' className='my-16 max-md:my-8 py-2 px-14 bg-dunas text-xl letter-spacing-25'>KNOW MORE...</a>
+            <div className='flex items-center gap-14 max-md:gap-8'>
+              <Image src={'/img/dunas/logo-redondo.png'} className='' width={101} height={125} alt="Pin"/>
+              <div className='h-20 border-r border-color'></div>
+              <Image src={'/img/dunas/logo-blanco.png'} className='' width={158} height={76} alt="logo blanco"/>
             </div>
           </div>
         </div>
       </section>
-      <section className="pb-20">
-        <div className="container mx-auto grid">
-          <div className="grid grid-cols-12">
-            <div className="col-span-6 flex items-center justify-center bg-slide-cabos max-md:col-span-12">
-              <div className="h-600 w-full py-11 flex flex-col justify-between galeria-responsive">
-                <div className="pl-16 max-md:pl-6">
-                  <p className="flex gap-2 uppercase font-semibold text-tfs pb-3"><FaLocationDot/> Baja California Sur</p>
-                  <h3 className="text-5xl font-bold uppercase text-tercero pb-4 max-md:text-3xl">Los Cabos</h3>
+      <section className='bg-dunas'>
+        <div className='grid grid-cols-12'>
+          <div className='grid col-span-5 max-md:col-span-12 py-28 max-md:py-12 px-14 max-md:px-6 max-md:order-2' id='form'>
+            <h3 className='text-tfs text-3xl max-md:text-center trajan pb-6'>FOR MORE INFORMATION</h3>
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <input type="text" name="nombre" id="nombre" placeholder="Full Name" className="w-full bg-transparent border-b p-3" value={nombre} onChange={(e) => setNombre(e.target.value)} required/>
                 </div>
-                <div className="flex justify-center" onClick={abrirModal}>
-                  <button className='py-2 px-8 bg-tfs text-white text-sm'>{t('contactanos')}</button>
+                <div>
+                  <PhoneInput international type="tel" name="tel" id="tel" placeholder="Phone" className="w-full bg-transparent border-b  p-3" value={tel} onChange={setTel} required/>
+                  <p className=' text-sm italic'>{t('leyenda_tel')}</p>
+                </div>
+                <div className='col-span-2'>
+                  <input type="email" name="email" id="email" placeholder="E-mail" className="w-full bg-transparent border-b  p-3" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                </div>
+                <div className='max-md:col-span-2'>
+                  <label for="tipo">When would you like to make your investment?</label>
+                  <select name="tipo" id="tipo" className="w-full bg-transparent border-b  p-3" value={tipo} onChange={(e) => setTipo(e.target.value)} required>
+                      <option value="">Select an option</option>
+                      <option value="Estoy listo para invertir">Im ready to invest</option>
+                      <option value="2 a 3 meses">2 to 3 months</option>
+                      <option value="Aún no estoy listo para invertir">Im not ready to invest yet</option>
+                  </select>
+                </div>
+                <div className='max-md:col-span-2'>
+                  <label for="inversion">What is your investment objective?</label>
+                  <select name="inversion" id="inversion" className="w-full bg-transparent border-b  p-3" value={inversion} onChange={(e) => setInversion(e.target.value)} required>
+                      <option value="">Select an option</option>
+                      <option value="Uso personal">Personal use</option>
+                      <option value="Buen retorno por rentas y plusvalia">Good returns from rental income and capital gains</option>
+                  </select>
+                </div>
+                <div className='col-span-2'>
+                  <label for="tipologia">What typology interests you?</label>
+                  <div className="flex items-center space-x-3 pb-2 pt-2">
+                    <input type="checkbox" id="tipologia-2br" value="Departamento 2 rec: Desde $315,000 USD" onChange={handleTipologiaChange} checked={tipologias.includes("Departamento 2 rec: Desde $315,000 USD")}/>
+                    <label htmlFor="tipologia-2br">2-bedroom apartment: From $315,000 USD</label>
+                  </div>
+                  <div className="flex items-center space-x-3 pb-2">
+                    <input type="checkbox" id="tipologia-3br" value="Departamento 3 rec: Desde $365,000 USD" onChange={handleTipologiaChange} checked={tipologias.includes("Departamento 3 rec: Desde $365,000 USD")}/>
+                    <label htmlFor="tipologia-3br">3-bedroom apartment: From $365,000 USD</label>
+                  </div>
+                  <div className="flex items-center space-x-3 pb-2">
+                    <input type="checkbox" id="tipologia-4br" value="Casa 4 rec: Desde $585,000 USD" onChange={handleTipologiaChange} checked={tipologias.includes("Casa 4 rec: Desde $585,000 USD")}/>
+                    <label htmlFor="tipologia-4br">4-bedroom house: From $585,000 USD</label>
+                  </div>
+                </div>
+                {/* Campos ocultos */}
+                <div className='hidden'>
+                  <input type="hidden" name="fechaEnvio" value={fechaEnvio} />
+                  <input type="hidden" name="horaEnvio" value={horaEnvio} />
+                  <input type="hidden" name="paginaEnvio" value={paginaEnvio} />
+                  <input type="hidden" name="formularioOrigen" value={formularioOrigen}/>
+                </div>
+                <div className="lg:col-span-1 max-md:col-span-2">
+                  <input type="checkbox" name="condiciones" id="condiciones" aria-label='condiciones' checked={condiciones} onChange={handleCheckboxChange} required/> I accept the <Link href="/aviso-de-privacidad" className="text-tfs hover">terms and conditions</Link>
+                </div>
+                <div className="lg:col-span-1 max-md:col-span-2 lg:text-right max-lg:text-center">
+                  <input type="submit" name="submit" id="submit" value={'send'} disabled={isSubmitting} className="py-1 px-16 bg-tfs uppercase text-dunas text-lg letter-spacing-25 hover-bg cursor-pointer"/>
+                </div>
+                <div className='lg:col-span-2'>
+                  {mensajeRespuesta && (
+                    <p className={`${esExito ? "text-green-600" : "text-red-600"} pb-2`}>
+                      {mensajeRespuesta}
+                    </p>
+                  )}
                 </div>
               </div>
-            </div>
-            <div className="col-span-6 flex items-center max-md:col-span-12 max-md:px-3 max-md:pt-6">
-              <div className="pl-16 max-md:pl-0">
-                <p className="text-sm xl:text-base 2xl:text-base font-medium text-onceavo pb-4">{t('consulta')}</p>
-                <h3 className="text-lg xl:text-2xl 2xl:text-3xl font-bold uppercase text-tercero pb-4 letter-spacing-25">{t('iman')}</h3>
-                <p className="text-sm pb-3 text-secondary text-justify max-md:text-base">{t('los_cabos_emerge')}</p>
-                <p className="text-sm pb-3 text-secondary text-justify max-md:text-base">{t('este_destino')}</p>
-                <p className="text-sm pb-10 text-secondary text-justify">{t('la_region')}</p>
-                <div className="flex justify-center" onClick={abrirModal}>
-                  <button className='py-3 px-6 bg-tfs text-white text-sm'>{t('conoce')}</button>
-                </div>
-              </div>
-            </div>
+            </form>
+          </div>
+          <div className='col-span-7 max-md:col-span-12 max-md:order-1'>
+            <MapaDunas/>
           </div>
         </div>
       </section>
-      <div className="portada-cabos-final flex relative justify-center cursor-pointer" onClick={abrirModal}>
-        <div className="h-full w-full top-0 left-0 absolute overflow-hidden z-0">
-          <video src="/video/cabos-final.mp4" className="absolute video-fondo-portada" autoPlay muted playsInline loop></video>
+      <section>
+        <div className='flex w-full h-[550px] overflow-hidden max-md:grid max-md:grid-cols-2'>
+          <div className='flex-1 dunas-bg-1 flex items-end relative transition-all duration-500 hover:flex-[2]'>
+          </div>
+          <div className='flex-1 dunas-bg-2 items-end relative transition-all duration-500 hover:flex-[2]'>
+          </div>
+          <div className='flex-1 dunas-bg-3 items-end relative transition-all duration-500 hover:flex-[2]'>
+          </div>
+          <div className='flex-1 dunas-bg-4 items-end relative transition-all duration-500 hover:flex-[2]'>
+          </div>
         </div>
-        <div className="portada-video-final flex justify-center items-center relative">
-            <div className="grid grid-cols-1 justify-items-center max-lg:px-3">
-              <div>
-                <h3 className="text-white font-bold uppercase letter-spacing-25 text-xl text-center max-lg:text-base pb-6">{t('oceanview')}</h3>
-              </div>
-              <div className="pb-10 max-lg:pb-0">
-                <Boton/>
-              </div>
-            </div>
-        </div>
-      </div>
-      <Formulario show={showModal} onClose={cerrarModal}/>
-    </Layout>
+      </section>
+    </LayoutDunas>
   );
 }
 
