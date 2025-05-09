@@ -1,12 +1,12 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-import Layout from '@/components/layout';
+import LayoutDunas from '@/components/layout-dunas';
 
 export default function Aviso() {
   // Traducciones
   const { t } = useTranslation()
   return (
-    <Layout
+    <LayoutDunas
       title={t('aviso')}
       description={t('aviso_descripcion')}
     >
@@ -73,7 +73,7 @@ export default function Aviso() {
             <p className="text-sm text-justify leading-6">{t('aviso_101')}</p>
             <p className="text-sm text-justify leading-6">{t('aviso_102')} <a href="https://home.inai.org.mx/" target="_blank" className="text-tfs hover" rel="noreferrer noopener">www.inai.org.mx</a></p>
         </section>
-    </Layout>
+    </LayoutDunas>
   )
 }
 
