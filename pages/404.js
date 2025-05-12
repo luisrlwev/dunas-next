@@ -1,9 +1,9 @@
-import Layout from "@/components/layout";
+import LayoutDunas from "@/components/layout-dunas";
 import Link from "next/link";
 
 export default function Pagina404() {
   return (
-    <Layout
+    <LayoutDunas
         title={"Error 404"}
         description={"Página de error 404"}
     >
@@ -12,6 +12,6 @@ export default function Pagina404() {
             <p className="pb-28 text-xl max-lg:text-base">La página a la que intentas acceder caducó o no esta disponible. Intenta con otra.</p>
             <Link href={'/'} className="bg-tfs text-white py-4 px-16 hover-bg rounded-md">Ir a inicio</Link>
         </section>
-    </Layout>
+    </LayoutDunas>
   )
 }
