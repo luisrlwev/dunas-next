@@ -131,12 +131,12 @@ export default function Dunas() {
           <div className='col-span-7 max-md:col-span-12 max-md:h-[380px] portada-dunas flex flex-col items-center justify-center relative'>
             <div className='absolute bottom-0 overlay-dunas w-full h-1/4'></div>
             <Image src={'/img/dunas/pin.png'} className='max-md:w-24' width={200} height={312} alt="Pin"/>
-            <h1 className='text-white absolute bottom-20 max-md:bottom-6 text-5xl max-md:text-3xl trajan'>COMING SOON...</h1>
+            <h1 className='text-white absolute bottom-20 max-md:bottom-6 text-5xl max-md:text-3xl trajan'>{t('coming_soon')}...</h1>
           </div>
           <div className='col-span-5 max-md:col-span-12 bg-doce flex flex-col items-center justify-center max-md:py-14'>
-            <h2 className='text-tfs trajan text-4xl pb-2'>friends & family</h2>
-            <p className='text-white text-xl'>Pricing for limited time</p>
-            <a href='#form' className='my-16 max-md:my-8 py-2 px-14 bg-dunas text-xl letter-spacing-25'>KNOW MORE...</a>
+            <h2 className='text-tfs trajan text-4xl pb-2'>{t('friends')}</h2>
+            <p className='text-white text-xl'>{t('pricing')}</p>
+            <a href='#form' className='my-16 max-md:my-8 py-2 px-14 bg-dunas text-xl letter-spacing-25'>{t('know')}...</a>
             <div className='flex items-center gap-14 max-md:gap-8'>
               <Image src={'/img/dunas/logo-redondo.png'} className='' width={101} height={125} alt="Pin"/>
               <div className='h-20 border-r border-color'></div>
@@ -148,49 +148,49 @@ export default function Dunas() {
       <section className='bg-dunas'>
         <div className='grid grid-cols-12'>
           <div className='grid col-span-5 max-md:col-span-12 py-28 max-md:py-12 px-14 max-md:px-6 max-md:order-2' id='form'>
-            <h3 className='text-tfs text-3xl max-md:text-center trajan pb-6'>FOR MORE INFORMATION</h3>
+            <h3 className='text-tfs text-3xl max-md:text-center trajan pb-6'>{t('for_more')}</h3>
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <input type="text" name="nombre" id="nombre" placeholder="Full Name" className="w-full bg-transparent border-b p-3" value={nombre} onChange={(e) => setNombre(e.target.value)} required/>
+                  <input type="text" name="nombre" id="nombre" placeholder={t('nombre')} className="w-full bg-transparent border-b p-3" value={nombre} onChange={(e) => setNombre(e.target.value)} required/>
                 </div>
                 <div>
-                  <PhoneInput international type="tel" name="tel" id="tel" placeholder="Phone" className="w-full bg-transparent border-b  p-3" value={tel} onChange={setTel} required/>
+                  <PhoneInput international type="tel" name="tel" id="tel" placeholder={t('telefono')} className="w-full bg-transparent border-b  p-3" value={tel} onChange={setTel} required/>
                   <p className=' text-sm italic'>{t('leyenda_tel')}</p>
                 </div>
                 <div className='col-span-2'>
                   <input type="email" name="email" id="email" placeholder="E-mail" className="w-full bg-transparent border-b  p-3" value={email} onChange={(e) => setEmail(e.target.value)} required/>
                 </div>
                 <div className='max-md:col-span-2'>
-                  <label for="tipo">When would you like to make your investment?</label>
+                  <label for="tipo">{t('when')}</label>
                   <select name="tipo" id="tipo" className="w-full bg-transparent border-b  p-3" value={tipo} onChange={(e) => setTipo(e.target.value)} required>
-                      <option value="">Select an option</option>
-                      <option value="Estoy listo para invertir">Im ready to invest</option>
-                      <option value="2 a 3 meses">2 to 3 months</option>
-                      <option value="Aún no estoy listo para invertir">Im not ready to invest yet</option>
+                      <option value="">{t('select')}</option>
+                      <option value="Estoy listo para invertir">{t('im_ready')}</option>
+                      <option value="2 a 3 meses">{t('2_3_months')}</option>
+                      <option value="Aún no estoy listo para invertir">{t('im_not_ready')}</option>
                   </select>
                 </div>
                 <div className='max-md:col-span-2'>
-                  <label for="inversion">What is your investment objective?</label>
+                  <label for="inversion">{t('what_is')}</label>
                   <select name="inversion" id="inversion" className="w-full bg-transparent border-b  p-3" value={inversion} onChange={(e) => setInversion(e.target.value)} required>
-                      <option value="">Select an option</option>
-                      <option value="Uso personal">Personal use</option>
-                      <option value="Buen retorno por rentas y plusvalia">Good returns from rental income and capital gains</option>
+                      <option value="">{t('select')}</option>
+                      <option value="Uso personal">{t('personal')}</option>
+                      <option value="Buen retorno por rentas y plusvalia">{t('good')}</option>
                   </select>
                 </div>
                 <div className='col-span-2'>
-                  <label for="tipologia">What typology interests you?</label>
+                  <label for="tipologia">{t('what_typology')}</label>
                   <div className="flex items-center space-x-3 pb-2 pt-2">
                     <input type="checkbox" id="tipologia-2br" value="Departamento 2 rec: Desde $315,000 USD" onChange={handleTipologiaChange} checked={tipologias.includes("Departamento 2 rec: Desde $315,000 USD")}/>
-                    <label htmlFor="tipologia-2br">2-bedroom apartment: From $315,000 USD</label>
+                    <label htmlFor="tipologia-2br">{t('2_bed')}</label>
                   </div>
                   <div className="flex items-center space-x-3 pb-2">
                     <input type="checkbox" id="tipologia-3br" value="Departamento 3 rec: Desde $365,000 USD" onChange={handleTipologiaChange} checked={tipologias.includes("Departamento 3 rec: Desde $365,000 USD")}/>
-                    <label htmlFor="tipologia-3br">3-bedroom apartment: From $365,000 USD</label>
+                    <label htmlFor="tipologia-3br">{t('3_bed')}</label>
                   </div>
                   <div className="flex items-center space-x-3 pb-2">
                     <input type="checkbox" id="tipologia-4br" value="Casa 4 rec: Desde $585,000 USD" onChange={handleTipologiaChange} checked={tipologias.includes("Casa 4 rec: Desde $585,000 USD")}/>
-                    <label htmlFor="tipologia-4br">4-bedroom house: From $585,000 USD</label>
+                    <label htmlFor="tipologia-4br">{t('4_bed')}</label>
                   </div>
                 </div>
                 {/* Campos ocultos */}
@@ -201,10 +201,10 @@ export default function Dunas() {
                   <input type="hidden" name="formularioOrigen" value={formularioOrigen}/>
                 </div>
                 <div className="lg:col-span-1 max-md:col-span-2">
-                  <input type="checkbox" name="condiciones" id="condiciones" aria-label='condiciones' checked={condiciones} onChange={handleCheckboxChange} required/> I accept the <Link href="/aviso-de-privacidad" className="text-tfs hover">terms and conditions</Link>
+                  <input type="checkbox" name="condiciones" id="condiciones" aria-label='condiciones' checked={condiciones} onChange={handleCheckboxChange} required/> {t('i_accept')} <Link href="/aviso-de-privacidad" className="text-tfs hover">{t('terms')}</Link>
                 </div>
                 <div className="lg:col-span-1 max-md:col-span-2 lg:text-right max-lg:text-center">
-                  <input type="submit" name="submit" id="submit" value={'send'} disabled={isSubmitting} className="py-1 px-16 bg-tfs uppercase text-dunas text-lg letter-spacing-25 hover-bg cursor-pointer"/>
+                  <input type="submit" name="submit" id="submit" value={t('send')} disabled={isSubmitting} className="py-1 px-16 bg-tfs uppercase text-dunas text-lg letter-spacing-25 hover-bg cursor-pointer"/>
                 </div>
                 <div className='lg:col-span-2'>
                   {mensajeRespuesta && (

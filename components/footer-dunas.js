@@ -90,7 +90,7 @@ export default function FooterDunas() {
         <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 py-10">
           <div className="flex max-md:flex-col items-center col-span-2 gap-8 max-md:gap-3">
             <div>
-              <p className='text-tfs text-4xl max-md:text-3xl trajan'>Certified <br className='max-md:hidden'/>Licenses</p>
+              <p className='text-tfs text-4xl max-md:text-3xl trajan'>{t('certificadas')} <br className='max-md:hidden'/>{t('licencias')}</p>
             </div>
             <div className='h-20 border-r border-color max-md:hidden'></div>
             <div className="flex gap-12 max-md:gap-6 justify-items-center items-center">
@@ -104,7 +104,7 @@ export default function FooterDunas() {
               <a href="https://wa.me/529841820785" className="flex items-center hover" target='_blank'><FaWhatsapp className="mr-3 text-3xl"/> +52 (624) 123 8954</a>
             </div>
             <div className='text-tfs'>
-              <p className='w-full pb-3 text-end'>¿Ya nos sigues?</p>
+              <p className='w-full pb-3 text-end'>{t('ya_nos_sigues')}</p>
               <div className='flex gap-2 justify-end max-md:justify-center'>
                 <a href="https://www.instagram.com/loscabosfromsky/" target="_blank" aria-label="Instagram"><FaInstagram className="hover text-3xl"/></a>
                 <a href="https://www.facebook.com/FromskyLosCabos" target="_blank" aria-label="Facebook"><FaFacebookF className="hover text-3xl"/></a>
