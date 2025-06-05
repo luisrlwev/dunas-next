@@ -13,21 +13,6 @@ export default function Document() {
         <meta property="og:image" content="https://loscabos.fromskyrealtors.com/img/logo-cuadrado.jpg"/>
         <meta property="og:url" content="https://loscabos.fromskyrealtors.com/"/>
         <meta property="og:type" content="website" />
-
-        {/* Scripts de iHomeFinder */}
-        <script async src="https://kestrel.idxhome.com/ihf-kestrel.js" />
-        <script
-          id="ihf-config"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.ihfKestrel = window.ihfKestrel || {};
-              ihfKestrel.config = {
-                platform: "custom",
-                activationToken: "b73f80a0-18b2-4696-9f11-acc8b19c3c93"
-              };
-            `,
-          }}
-        />
       </Head>
       <body>
         <Main />

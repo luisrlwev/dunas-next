@@ -12,11 +12,10 @@ function App({ Component, pageProps }) {
       <Analytics />
       {/* HubSpot Embed Code */}
       <Script
-        src="//js.hs-scripts.com/45318285.js"
         id="hs-script-loader"
+        src="//js.hs-scripts.com/6797997.js"
         async
         defer
-        strategy="afterInteractive"
       />
     </>
   );
