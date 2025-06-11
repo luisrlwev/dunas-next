@@ -18,8 +18,8 @@ const MapaDunas = () => {
           title: "Dunas",
           description: "Dunas",
           icon: "/img/dunas/dunas.png",
-          width: "60px",
-          height: "60px"
+          width: "50px",
+          height: "50px"
         },
         {
           lat: 22.909270946695102,
